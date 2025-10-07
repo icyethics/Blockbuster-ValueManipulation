@@ -1,0 +1,12 @@
+{
+    "id": "Blockbuster-ValueManipulation",
+    "name": "Blockbuster: Value Manipulation",
+    "author": ["IcyEthics"],
+    "description": "An API mod that adds an opt-in value Manipulation system to Balatro",
+    "prefix": "bbvalman",
+    "main_file": "blockbuster_valman.lua",
+    "badge_colour": "af2828",
+    "priority": 1000,
+    "version": "0.0.1",
+    "dependencies": ["Steamodded (>=1.0.0~BETA-0711a)", "Lovely (>=0.8)"]
+}

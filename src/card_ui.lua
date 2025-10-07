@@ -1,0 +1,32 @@
+local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
+function Card.generate_UIBox_ability_table(self, ...)
+    local full_UI_table = generate_UIBox_ability_tableref(self, ...)
+
+    if Blockbuster.ValueManipulation_config.compat_box then
+
+        local _key = Blockbuster.get_localization_key_for_valmanip_standard(self)
+        generate_card_ui({set = 'Other', key = "compat_standard_" .. _key}, full_UI_table)
+    end
+
+
+
+    return full_UI_table
+end
+
+function Blockbuster.get_localization_key_for_valmanip_standard(card)
+    local _key = Blockbuster.get_standard_from_card(card)
+    if _key == nil then
+        _key = "none"
+    else
+        
+        if Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key then
+            _key = Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key
+        end
+
+        if not Blockbuster.value_manipulation_compat(card, _key) then
+            _key = "none"
+        end
+    end
+
+    return _key
+end
