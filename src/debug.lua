@@ -54,9 +54,10 @@ SMODS.Keybind({
                 if _joker.config.center and _joker.config.center.original_mod then
                 end
                 -- print(_joker.mod.id)
-                Card:bb_set_multiplication_bonus(_joker, "debug", 10)
+                local _value = 11
+                Card:bb_set_multiplication_bonus(_joker, "debug", _value)
                 card_eval_status_text(_joker, 'extra', nil, nil, nil,
-                { message = "x10 VALUE (DEBUG)", colour = G.C.BLACK })
+                { message = "x" .. _value .. " VALUE (DEBUG)", colour = G.C.BLACK })
             end
 
         end

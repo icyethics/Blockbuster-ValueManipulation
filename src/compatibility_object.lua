@@ -16,6 +16,15 @@ Blockbuster.ValueManipulation.CompatStandard = SMODS.GameObject:extend {
         ends_on = {},
         starts_with = {},
     },
+    integer_only_variable_conventions = {
+        full_vars = {},
+        ends_on = {},
+        starts_with = {},
+    },
+    variable_caps = {
+        -- variable_key = 10 (the cap)
+    },
+    min_max_values = {min = 0, max = 25}, -- Min will be assumed to be 0 (to prevent negative values.) Max is equal to 25 by default
     exempt_jokers = nil,
     source_mod = nil,
     register = function(self)

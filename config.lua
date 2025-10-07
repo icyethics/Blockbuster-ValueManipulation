@@ -1,4 +1,4 @@
 return {
     ["debug_print"] = false,
-    ["compat_box"] = true,
+    ["compat_box"] = false,
 }
