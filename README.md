@@ -1,5 +1,8 @@
 # Blockbuster-ValueManipulation
-Adds a system for Value Manipulation compatibility to Balatro, intended to offer an opt-in method
+
+THIS IS AN ALPHA-BUILD OF THIS API. FEEDBACK IS APPRECIATED, AND FUNDAMENTAL CHANGES TO THE SET UP MAY STILL HAPPEN.
+
+Adds a system for Value Manipulation compatibility to Balatro, intended to offer an opt-in method.
 
 - Joker value manipulation
 - Value Randomization (a la Misprinterize from Cryptid)
