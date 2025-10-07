@@ -36,7 +36,7 @@ end
 
 local _list_of_folders = {
     "src",
-    "items/value_manip_guides"
+    "items/compat_standard"
 }
 
 for _index, _folder in ipairs(_list_of_folders) do
