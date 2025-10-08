@@ -33,5 +33,12 @@ return {
                 }
             }
         }
+    },
+    misc = {
+        dictionary = {
+            blockbuster_config_debug_print = "Print Debug statements",
+            blockbuster_config_compat_box = "Always display compatibility tooltips",
+            blockbuster_config_header = "Blockbuster: Value Manipulation"
+        }
     }
 }

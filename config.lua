@@ -1,4 +1,1 @@
-return {
-    ["debug_print"] = false,
-    ["compat_box"] = false,
-}
+return {["compat_box"]=false,["debug_print"]=false,}
