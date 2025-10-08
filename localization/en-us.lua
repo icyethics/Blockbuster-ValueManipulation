@@ -1,6 +1,14 @@
 return {
     descriptions = {
         Other = {
+            blockbuster_valmanip_boost = {
+                name = "Value Boost",
+                text = {
+                    "Values have been",
+                    "boosted by {C:legendary}#1#x{}"
+                }
+            },
+
             compat_standard_none = {
                 name = "Incompatible",
                 text = {

@@ -8,6 +8,12 @@ function Card.generate_UIBox_ability_table(self, ...)
         generate_card_ui({set = 'Other', key = "compat_standard_" .. _key}, full_UI_table)
     end
 
+    if Blockbuster.ValueManipulation_config.display_current_boost then
+        local _value = self:get_total_multiplier(self)
+        if _value and _value > 1 then
+            generate_card_ui({set = 'Other', key = "blockbuster_valmanip_boost", vars = {_value}}, full_UI_table)
+        end
+    end
 
 
     return full_UI_table

@@ -2,6 +2,7 @@ local config_toggles = {
 	-- Mod Mechanics
 	{ref_value = "debug_print", label = "blockbuster_config_debug_print"},
 	{ref_value = "compat_box", label = "blockbuster_config_compat_box"},
+	{ref_value = "display_current_boost", label = "blockbuster_config_display_current_boost"}
 }
 
 
