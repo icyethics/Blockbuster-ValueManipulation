@@ -36,8 +36,8 @@ function Blockbuster.Debug.valManipMult()
     print("Function Called:")
     local _index = 0
     for _index, _object in ipairs(G.jokers.cards) do
-        if _object.ability and _object.ability.multipliers then
-            for _source, _mult in pairs(_object.ability.multipliers) do
+        if _object.ability and _object.ability.blockbuster_multipliers then
+            for _source, _mult in pairs(_object.ability.blockbuster_multipliers) do
                 print(_source .. ": x" .. _mult)
             end
         end
@@ -54,7 +54,7 @@ SMODS.Keybind({
                 if _joker.config.center and _joker.config.center.original_mod then
                 end
                 -- print(_joker.mod.id)
-                local _value = 11
+                local _value = 10
                 Card:bb_set_multiplication_bonus(_joker, "debug", _value)
                 card_eval_status_text(_joker, 'extra', nil, nil, nil,
                 { message = "x" .. _value .. " VALUE (DEBUG)", colour = G.C.BLACK })

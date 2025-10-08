@@ -1,46 +1,23 @@
-function Card:bb_set_multiplication_bonus(card, source, num, is_actor, reset_from_value_for_cryptid)
-
-    -- CRYPTID COMPATIBILITY
-    -- if not card or not card.config or not card.config.center or not kino_config.actor_synergy or not card.config.center.kino_joker then
-    --     if Cryptid and card and card.config and card.config.center then
-    --         if not Card.no(card, "immutable", true) then
-    --             local _val = num
-    --             if reset_from_value_for_cryptid then
-    --                 _val = 1 / reset_from_value_for_cryptid
-    --             end
-    --             Cryptid.with_deck_effects(card, function(cards)
-    --                 Cryptid.misprintize(
-    --                     cards,
-    --                     { min = _val, max = _val},
-    --                     nil,
-    --                     true
-    --                 )
-    --             end)
-    --             return true
-    --         end
-    --     end
-    --     return false
-    -- end
+function Card:bb_set_multiplication_bonus(card, source, num)
 
     -- Gather the right value manipulation method
     local _standard = Blockbuster.get_standard_from_card(card)
     
-
     if _standard and not Blockbuster.value_manipulation_compat(card, _standard) then
         return false
     end
 
     -- If No method was chosen, but a generic one exists, use generic one
     if _standard == nil and Cryptid then
-        Blockbuster.Cryptid_bb_set_multiplication_bonus(card, source, num, is_actor, reset_from_value_for_cryptid)
+        Blockbuster.Cryptid_bb_set_multiplication_bonus(card, source, num)
         return true
     end
 
     local _standardObj = Blockbuster.ValueManipulation.CompatStandards[_standard]
 
-    if not card.ability.multipliers then
+    if not card.ability.blockbuster_multipliers then
         card.ability.base = {}
-        card.ability.multipliers = {}
+        card.ability.blockbuster_multipliers = {}
         if type(card.ability.extra) ~= "table" then
             card.ability.base = card.ability.extra
 
@@ -53,18 +30,18 @@ function Card:bb_set_multiplication_bonus(card, source, num, is_actor, reset_fro
         end
     end
 
-    local _multipliers = card.ability.multipliers
+    local _multipliers = card.ability.blockbuster_multipliers
     local _source = source
     local _num = num
 
     -- Add the source, or replace it if already existing
     if _source and _num then
-        if card.ability.multipliers[_source] == _num then
+        if card.ability.blockbuster_multipliers[_source] == _num then
             return false
-        elseif card.ability.multipliers[_source] ~= nil and _num == 1 then
-            for index, item in ipairs(card.ability.multipliers) do
-                if card.ability.multipliers[_source] == item then
-                    table.remove(card.ability.multipliers, index)
+        elseif card.ability.blockbuster_multipliers[_source] ~= nil and _num == 1 then
+            for index, item in ipairs(card.ability.blockbuster_multipliers) do
+                if card.ability.blockbuster_multipliers[_source] == item then
+                    table.remove(card.ability.blockbuster_multipliers, index)
                 end    
             end
         end 
@@ -124,7 +101,7 @@ function Card:bb_set_multiplication_bonus(card, source, num, is_actor, reset_fro
     end
 
     if Blockbuster.ValueManipulation.vanilla_exemption_joker_list[card.config.center.key] then
-        Blockbuster.value_manipulation_vanilla_card(card, source, num, is_actor, reset_from_value_for_cryptid)
+        Blockbuster.value_manipulation_vanilla_card(card, source, num)
     end
 
     return true
@@ -132,25 +109,81 @@ end
 
 function Card:get_multiplier_by_source(card, source)
     if not card or not card.ability or 
-    not card.ability.multipliers or 
-    not card.ability.multipliers[source] then
+    not card.ability.blockbuster_multipliers or 
+    not card.ability.blockbuster_multipliers[source] then
         return false
     end
 
-    return card.ability.multipliers[source]
+    return card.ability.blockbuster_multipliers[source]
 end
 
 function Card:get_total_multiplier(card)
     if not card or not card.ability or 
-    not card.ability.multipliers then
+    not card.ability.blockbuster_multipliers then
         return false
     end
 
     local _total = 0
 
-    for _source, _mult in pairs(card.ability.multipliers) do
+    for _source, _mult in pairs(card.ability.blockbuster_multipliers) do
         _total = _total + _mult
     end
     return _total
 end
 
+function Blockbuster.manipulate_value(card, source, num, change)
+    if not card or not source or not num then
+        return false
+    end
+
+    if not change then change = false end
+
+    if change then
+        local _curnum = card:get_multiplier_by_source(card, source) or 1
+        num = _curnum + change
+    end
+
+    -- Temporary gate all use of blockbuster to jokers only
+    if card.ability.set ~= "Joker" and Cryptid then
+        Blockbuster.Cryptid_bb_set_multiplication_bonus(card, source, num)
+        return true
+    elseif card.ability.set ~= "Joker" then
+        return false
+    end
+
+    card.bb_set_multiplication_bonus(card, source, num)
+end
+
+function Blockbuster.reset_value_multiplication(card, sources)
+    if not card or not sources then
+        return false
+    end
+
+    if type(sources) == 'string' then
+        local _value = sources
+        sources = {_value}
+    end
+
+    for _index, _source in ipairs(sources) do
+        card.bb_set_multiplication_bonus(card, _source, 1)
+    end
+
+end
+
+function Blockbuster.remove_all_value_multiplication(card)
+    if card and card.ability and card.ability.multiplier then
+        for _key, _mult in pairs(card.ability.multiplier) do
+            card.bb_set_multiplication_bonus(card, _key, 1)
+        end
+    end
+end
+
+function Blockbuster.remove_value_multiplication_if_partial_key_match(card, partial_key_match)
+    if card and card.ability and card.ability.multiplier then
+        for _key, _mult in pairs(card.ability.multiplier) do
+            if string.find(_key, partial_key_match) then
+                card.bb_set_multiplication_bonus(card, _key, 1)
+            end
+        end
+    end
+end

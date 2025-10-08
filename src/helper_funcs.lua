@@ -45,3 +45,21 @@ function Blockbuster.value_manipulation_compat(card, standard)
         return true
     end
 end
+
+function Blockbuster.get_keys_of_value_manip_sources(card, partial_key_match)
+    local _table = {}
+
+    if card and card.ability and card.ability.multiplier then
+        for _key, _garb in pairs(card.ability.multiplier) do
+            if partial_key_match then
+                if string.find(_key, partial_key_match) then
+                    _table[#_table + 1] = _key
+                end
+            else
+                _table[#_table + 1] = _key
+            end
+        end
+    end
+
+    return _table
+end

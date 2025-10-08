@@ -21,8 +21,8 @@ Blockbuster.ValueManipulation.vanilla_exemption_joker_list = {
     j_yorick = true,
 }
 
-function Blockbuster.value_manipulation_vanilla_card(card, source, num, is_actor, reset_from_value_for_cryptid)
-    local _multipliers = card.ability.multipliers
+function Blockbuster.value_manipulation_vanilla_card(card, source, num)
+    local _multipliers = card.ability.blockbuster_multipliers
 
     -- Joker
     if card.config.center.key == "j_joker" then

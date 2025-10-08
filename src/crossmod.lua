@@ -29,27 +29,27 @@ if Cryptid and Talisman then
         end
     end
 
-    function Blockbuster.Cryptid_bb_set_multiplication_bonus(card, source, num, is_actor, reset_from_value_for_cryptid)
+    function Blockbuster.Cryptid_bb_set_multiplication_bonus(card, source, num)
         if card and card.config and card.config.center then
             if not Card.no(card, "immutable", true) then
-                if not card.ability.multipliers then
-                    card.ability.multipliers = {}
+                if not card.ability.blockbuster_multipliers then
+                    card.ability.blockbuster_multipliers = {}
                 end
                 local _cur_mult = card:get_multiplier_by_source(card, source) or 0
                 local _multiplier_total = Card:get_total_multiplier(card)
                 
                 if source and num then
-                    if card.ability.multipliers[source] == num then
+                    if card.ability.blockbuster_multipliers[source] == num then
                         return false
-                    elseif card.ability.multipliers[source] ~= nil and num == 1 then
-                        for index, item in ipairs(card.ability.multipliers) do
-                            if card.ability.multipliers[source] == item then
-                                table.remove(card.ability.multipliers, index)
+                    elseif card.ability.blockbuster_multipliers[source] ~= nil and num == 1 then
+                        for index, item in ipairs(card.ability.blockbuster_multipliers) do
+                            if card.ability.blockbuster_multipliers[source] == item then
+                                table.remove(card.ability.blockbuster_multipliers, index)
                             end    
                         end
                     end 
 
-                    card.ability.multipliers[source] = num        
+                    card.ability.blockbuster_multipliers[source] = num        
                 end
 
                 

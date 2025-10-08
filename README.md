@@ -21,6 +21,20 @@ Jokers that incorporate odds will often be detrimentally affected by value manip
 - Stacked values aren't changed
 Stacking jokers, like Runner, Flash Card or Hologram are more interesting when they're focused on how they stack, rather on the final value they give. This is why the API recommends setting up the stacked chips, mult or xmult value to not be affected, but have earned values change. By setting it up like this, temporary value increases on stacking jokers still have a benefit, as you can use it to stack more quickly. It also prevents stacking xmult jokers from becoming generic scoring jokers, due to the base value of 1 being manipulated separately. 
 
+# Using the Value Manipulation Functions
+
+The main function you will be using to actually manipulate values is
+```Blockbuster.manipulate_value(card, source, num, change)```
+
+- card: the card which will have its values manipulated. (Currently, this must be a Joker)
+- source: a key to store the current value manipulation from this source. 
+- num: the final manipulation. This overrides previous values if present, or fully removes the entry if it's set to 1 (as value x1 would result in no manipulation)
+- [OPTIONAL] change: set to true if you want the num parameter to not override, but to change the existing value, instead. If a joker already has a current x2.5 from the source 'PowerBoost', Blockbuster.manipulate_value(card, "PowerBoost", 1.1) will set it to 1.1. However, Blockbuster.manipulate_value(card, "PowerBoost", 1.1, true) will set it to 3.6.
+
+NOTE: The current implementation only works on jokers (this hopefully will be expanded in the future), and will return false without having any effect. If you have Cryptid installed, however, Cryptid's value manipulation will be used. 
+
+
+
 # Using a provided Compatibility Standard
 
 Provided with the API are multiple compatibility standards (CompatStandards). These standards determine how your objects are treated by the value manipulation system. As a default, the system checks the source mod for an object, and then sees if that object has a CompatStandard registered. It's recommended to use the 'basic' CompatStandard if you want to use a default one and have not yet started writing your mod. It's strongly advised not to use the 'vanilla_base' or 'vanilla_chips' standard, as these are set up to account for the quirks of vanilla code, and incorporate hardcoded exceptions. 
