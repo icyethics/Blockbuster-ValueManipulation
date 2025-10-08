@@ -55,7 +55,7 @@ SMODS.Keybind({
                 end
                 -- print(_joker.mod.id)
                 local _value = 10
-                Card:bb_set_multiplication_bonus(_joker, "debug", _value)
+                Blockbuster.manipulate_value(_joker, "debug", _value)
                 card_eval_status_text(_joker, 'extra', nil, nil, nil,
                 { message = "x" .. _value .. " VALUE (DEBUG)", colour = G.C.BLACK })
             end

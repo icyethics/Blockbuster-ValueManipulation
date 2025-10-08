@@ -132,6 +132,8 @@ function Card:get_total_multiplier(card)
 end
 
 function Blockbuster.manipulate_value(card, source, num, change)
+    print("test entry")
+
     if not card or not source or not num then
         return false
     end
@@ -151,7 +153,19 @@ function Blockbuster.manipulate_value(card, source, num, change)
         return false
     end
 
-    card.bb_set_multiplication_bonus(card, source, num)
+    -- quantum remove from deck to allow for specific effects
+    if not card.added_to_deck then
+        card.bb_set_multiplication_bonus(card, source, num)
+        return true
+    else
+        -- card.from_quantum = true
+        -- card:remove_from_deck(true)
+        card.bb_set_multiplication_bonus(card, source, num)
+        -- card:add_to_deck(true)
+        -- card.from_quantum = true
+
+        return true
+    end
 end
 
 function Blockbuster.reset_value_multiplication(card, sources)

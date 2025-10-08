@@ -27,8 +27,8 @@ Blockbuster.ValueManipulation.CompatStandard{
         j_midas_mask = true,
         j_luchador = true,
         j_hallucination = true,
-        j_juggler = true,
-        j_drunkard = true,
+        -- j_juggler = true,
+        -- j_drunkard = true,
 
         j_diet_cola = true,
 
