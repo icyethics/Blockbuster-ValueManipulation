@@ -68,17 +68,17 @@ function Blockbuster.get_keys_of_value_manip_sources(card, partial_key_match)
     return _table
 end
 
--- This is baed on code taken from Cryptid 0.5.12a
--- misc.lua lines 298-309
-function Blockbuster.with_deck_effects(card, func, args)
-	if not card.added_to_deck then
-		return func(card, args.source, args.num)
-	else
-		card.from_quantum = true
-		card:remove_from_deck(true)
-		local ret = func(card, args.source, args.num)
-		card:add_to_deck(true)
-		card.from_quantum = nil
-		return ret
-	end
+function Blockbuster.is_value_manip_compatible(card)
+    if not card or not card.config or not card.config.center then
+        return false
+    end
+
+    local _standard = card.config.center.bb_personal_standard or Blockbuster.get_standard_from_card(card)
+    if _standard  then
+        if Blockbuster.value_manipulation_compat(card, _standard) then
+            return true
+        end
+    end
+
+    return false
 end
