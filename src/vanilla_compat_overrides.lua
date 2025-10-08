@@ -1,15 +1,21 @@
 Blockbuster.ValueManipulation.vanilla_exemption_joker_list = {
     j_joker = true,
+
     j_jolly = true,
     j_zany = true,
     j_mad = true,
     j_crazy = true,
     j_droll = true,
+
     j_sly = true,
     j_wily = true,
     j_clever = true,
     j_devious = true,
     j_crafty = true,
+
+    j_juggler = true,
+    j_drunkard = true,
+
     j_popcorn = true,
     j_ramen = true,
     j_swashbuckler = true,
@@ -66,6 +72,31 @@ function Blockbuster.value_manipulation_vanilla_card(card, source, num)
             card.ability.t_chips = card.ability.t_chips * mult
         end
     end
+
+    -- Juggler
+    if card.config.center.key == 'j_juggler' then
+        if not card.ability.base then
+            card.ability.base = card.ability.h_size
+        end
+
+        card.ability.h_size = card.ability.base
+        for source, mult in pairs(_multipliers) do
+            card.ability.h_size = card.ability.h_size * mult
+        end
+    end
+
+    -- Drunkard
+    if card.config.center.key == 'j_drunkard' then
+        if not card.ability.base then
+            card.ability.base = card.ability.d_size
+        end
+
+        card.ability.d_size = card.ability.base
+        for source, mult in pairs(_multipliers) do
+            card.ability.d_size = card.ability.d_size * mult
+        end
+    end
+
 
     -- Popcorn
     if card.config.center.key == "j_popcorn" then

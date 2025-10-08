@@ -76,7 +76,7 @@ SMODS.Keybind({
                 if _joker.config.center and _joker.config.center.original_mod then
                     print(_joker.config.center.original_mod.id)
                 end
-                Card:bb_set_multiplication_bonus(_joker, "debug", 1)
+                Blockbuster.manipulate_value(_joker, "debug", 1)
                 card_eval_status_text(_joker, 'extra', nil, nil, nil,
                 { message = "RESET VALUE (DEBUG)", colour = G.C.BLACK })
             end

@@ -155,14 +155,14 @@ function Blockbuster.manipulate_value(card, source, num, change)
 
     -- quantum remove from deck to allow for specific effects
     if not card.added_to_deck then
-        card.bb_set_multiplication_bonus(card, source, num)
+        card:bb_set_multiplication_bonus(card, source, num)
         return true
     else
-        -- card.from_quantum = true
-        -- card:remove_from_deck(true)
-        card.bb_set_multiplication_bonus(card, source, num)
-        -- card:add_to_deck(true)
-        -- card.from_quantum = true
+        card.from_quantum = true
+        card:remove_from_deck(true)
+        card:bb_set_multiplication_bonus(card, source, num)
+        card:add_to_deck(true)
+        card.from_quantum = true
 
         return true
     end

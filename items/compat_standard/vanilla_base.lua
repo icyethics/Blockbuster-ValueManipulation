@@ -3,16 +3,17 @@ Blockbuster.ValueManipulation.CompatStandard{
     prefix_config = {key = { mod = false, atlas = false}},
     source_mod = "Vanilla",
     exempt_jokers = {
+
+        -- These jokers are exempt because their mechanics do not make sense for value manipulation
         j_stencil = true,
         j_four_fingers = true,
-        j_credit_card  = true,
+
         j_ceremonial = true,
         j_8_ball = true,
         j_raised_fist = true,
         j_chaos = true,
 
         j_pareidolia = true,
-        j_business = true,
         j_space = true,
         
         j_dna = true,
@@ -27,13 +28,10 @@ Blockbuster.ValueManipulation.CompatStandard{
         j_midas_mask = true,
         j_luchador = true,
         j_hallucination = true,
-        -- j_juggler = true,
-        -- j_drunkard = true,
 
         j_diet_cola = true,
 
-        j_mr_bones = true,
-        j_troubadour = true,
+
         j_certificate = true,
         j_smeared = true,
 
@@ -48,8 +46,11 @@ Blockbuster.ValueManipulation.CompatStandard{
         j_astronomer = true,
         j_burnt = true,
         j_chicot = true,
-        j_perkeo = true
 
+        -- These jokers are exempt because their vanilla code does not allow for value manipulation
+        j_mr_bones = true,
+        j_perkeo = true,
+        j_business = true,
     },
     variable_conventions = {
         full_vars = {
@@ -59,7 +60,8 @@ Blockbuster.ValueManipulation.CompatStandard{
             "faces",
             "h_mod",
             "discards",
-            "every"
+            "every",
+            "h_plays"
         },
         ends_on = {
         },
