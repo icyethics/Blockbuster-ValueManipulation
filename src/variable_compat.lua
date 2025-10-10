@@ -15,15 +15,15 @@ function Blockbuster.check_variable_validity_for_mult(name, compat_standard_key,
     end
 
     -- Check variable start
-    for i = 1, #compat_standard.variable_conventions.starts_with do
-        if string.sub(name, -#compat_standard.variable_conventions.starts_with[i]) == compat_standard.variable_conventions.starts_with[i] then
+    for i = 1, #compat_standard.variable_conventions.ends_on do
+        if string.sub(name, -#compat_standard.variable_conventions.ends_on[i]) == compat_standard.variable_conventions.ends_on[i] then
             return false
         end
     end
 
     -- Check variable ends
-    for i = 1, #compat_standard.variable_conventions.ends_on do
-        if string.sub(name, 1, #compat_standard.variable_conventions.ends_on[i]) == compat_standard.variable_conventions.ends_on[i] then
+    for i = 1, #compat_standard.variable_conventions.starts_with do
+        if string.sub(name, 1, #compat_standard.variable_conventions.starts_with[i]) == compat_standard.variable_conventions.starts_with[i] then
             return false
         end
     end
