@@ -73,6 +73,10 @@ function Blockbuster.is_value_manip_compatible(card)
         return false
     end
 
+    if Cryptid then
+        return true
+    end
+
     local _standard = card.config.center.bb_personal_standard or Blockbuster.get_standard_from_card(card)
     if _standard  then
         if Blockbuster.value_manipulation_compat(card, _standard) then
