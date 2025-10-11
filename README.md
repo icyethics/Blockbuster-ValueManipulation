@@ -1,6 +1,14 @@
 # Blockbuster-ValueManipulation
 
-THIS IS AN ALPHA-BUILD OF THIS API. FEEDBACK IS APPRECIATED, AND FUNDAMENTAL CHANGES TO THE SET UP MAY STILL HAPPEN.
+Blockbuster is a series of API mods that offer features from the Balatro Goes Kino mod as stand-alone packages. They're set up to support other mods' use of these features without needing to also interact with Balatro Goes Kino's themes and playable content. 
+
+Blockbuster Mods:
+- Balatro Goes Kino (Source Content mod)
+- [Blockbuster: Counters ](https://github.com/icyethics/Blockbuster-Counters)
+- [Blockbuster: Spellcasting](https://github.com/icyethics/Blockbuster-Spellcasting)
+- [Blockbuster: Value Manipulation](https://github.com/icyethics/Blockbuster-ValueManipulation)
+- Blockbuster: Confections (Not Yet Released)
+- Blockbuster: Abduction (Not Yet Released)
 
 Adds a system for Value Manipulation compatibility to Balatro, intended to offer an opt-in method.
 
