@@ -26,6 +26,7 @@ Blockbuster.ValueManipulation.CompatStandard = SMODS.GameObject:extend {
     },
     min_max_values = {min = 0, max = 25}, -- Min will be assumed to be 0 (to prevent negative values.) Max is equal to 25 by default
     exempt_jokers = nil,
+    redirect_objects = nil, -- You can store a table here with jokers you want to have another standard for
     source_mod = nil,
     register = function(self)
         if self.registered then

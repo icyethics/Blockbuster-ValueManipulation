@@ -54,5 +54,13 @@ Blockbuster.ValueManipulation.CompatStandard{
     exempt_jokers = {
         j_modID_examplejoker = true
     },
+
+    -- redirect objects allow you to pass objects onto alternative standards. (These do not chain. You can not have a redirect object be redirected again)
+    -- the first table key is the key of the compatStandard you want to go into. This contains a dictionary of objects keys
+    redirect_objects = {
+        example_alternative = {
+            j_modID_examplejoker = true
+        }
+    }, 
     
 }

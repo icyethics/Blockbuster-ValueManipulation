@@ -1,7 +1,7 @@
 Blockbuster.ValueManipulation.CompatStandard{
     key = "grabbag",
     prefix_config = {key = { mod = false, atlas = false}},
-    source_mod = "GrabBag",
+    source_mod = "GrabBag-NO", -- prevent actual grab bag compat
     variable_conventions = {
         full_vars = {
             "odds",

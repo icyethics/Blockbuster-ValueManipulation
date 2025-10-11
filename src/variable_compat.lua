@@ -7,6 +7,11 @@ function Blockbuster.check_variable_validity_for_mult(name, compat_standard_key,
         compat_standard = override
     end
 
+    -- Return if it doesn't exist
+    if not compat_standard.variable_conventions then
+        return true
+    end
+
     -- Check variable name
     for i = 1, #compat_standard.variable_conventions.full_vars do
         if name == compat_standard.variable_conventions.full_vars[i] then
@@ -39,6 +44,11 @@ function Blockbuster.check_variable_validity_for_int_only(name, compat_standard_
     local compat_standard = Blockbuster.ValueManipulation.CompatStandards[compat_standard_key]
     if override then
         compat_standard = override
+    end
+
+    -- Return if it doesn't exist
+    if not compat_standard.integer_only_variable_conventions then
+        return false
     end
 
     -- Check variable name

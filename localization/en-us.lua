@@ -39,13 +39,29 @@ return {
                     "Testing this out",
                     "for Grab Bag",
                 }
-            }
+            },
+            compat_standard_morefluff = {
+                name = "MoreFluff",
+                text = {
+                    "Testing this out",
+                    "for MoreFluff",
+                }
+            },
+            compat_standard_morefluff_scaling = {
+                name = "MoreFluff (SCALING)",
+                text = {
+                    "Testing this out",
+                    "for MoreFluff's scaling jokers",
+                }
+            },
+
         }
     },
     misc = {
         dictionary = {
             blockbuster_config_debug_print = "Print Debug statements",
             blockbuster_config_compat_box = "Always display compatibility tooltips",
+            blockbuster_config_display_current_boost = "Display the current boost received",
             blockbuster_config_header = "Blockbuster: Value Manipulation"
         }
     }

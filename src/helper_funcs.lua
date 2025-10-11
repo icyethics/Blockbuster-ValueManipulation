@@ -26,11 +26,22 @@ function Blockbuster.get_standard_from_card(card)
 
     local _mod_id = Blockbuster.get_mod_id_from_card(card)
 
+    local _standard_key = nil
     if _mod_id then
-        return Blockbuster.ValueManipulation.ModToCompatStandard[_mod_id]
+        _standard_key = Blockbuster.ValueManipulation.ModToCompatStandard[_mod_id]
     else
         return nil
     end
+
+    if Blockbuster.ValueManipulation.CompatStandards[_standard_key].redirect_objects then
+        for _key, _dict in pairs(Blockbuster.ValueManipulation.CompatStandards[_standard_key].redirect_objects) do
+            if _dict[card.config.center.key] then
+                return _key
+            end
+        end
+    end
+
+    return _standard_key
 
 end
 

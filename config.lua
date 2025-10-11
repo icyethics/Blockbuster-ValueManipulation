@@ -1,4 +1,1 @@
-return {
-    ["compat_box"] = false,
-    ["debug_print"] = false,
-    ["display_current_boost"] = true}
+return {["compat_box"]=false,["display_current_boost"]=true,["debug_print"]=false,}
