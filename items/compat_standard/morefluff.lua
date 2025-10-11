@@ -1,5 +1,4 @@
--- This is a showcase CompatStandard, with comments explaining each field. 
--- It's not fully functional, and only contains entries to show usage.
+-- base standard for MoreFluff
 
 Blockbuster.ValueManipulation.CompatStandard{
     key = "morefluff",
