@@ -88,13 +88,13 @@ function Card:bb_set_multiplication_bonus(card, source, num)
                     _cardextra[name] = math.floor(_cardextra[name] + 0.5)
                 end
 
-                if _standardObj and _standardObj.variable_caps and _standardObj.variable_caps[name] or
+                if (not _override and _standardObj and _standardObj.variable_caps and _standardObj.variable_caps[name]) or
                 _override and _override.variable_caps and _override.variable_caps[name] then
                     local _usedStandard = _override or _standardObj
                     _cardextra[name] = math.min(_cardextra[name], _usedStandard.variable_caps[name])                    
                 end
 
-                if _standardObj and _standardObj.min_max_values or
+                if (not _override and _standardObj and _standardObj.min_max_values) or
                 (_override and _override.min_max_values) then
                     local _usedStandard = _override or _standardObj 
                     local _min = _usedStandard.min_max_values.min
