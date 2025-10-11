@@ -1,3 +1,23 @@
+---Returns localization key for the used standard
+---@param card Card
+---@return string
+Blockbuster.get_localization_key_for_valmanip_standard = function(card)
+    local _key = Blockbuster.get_standard_from_card(card)
+    if _key == nil then
+        _key = "none"
+    else
+        if Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key then
+            _key = Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key
+        end
+
+        if not Blockbuster.value_manipulation_compat(card, _key) then
+            _key = "none"
+        end
+    end
+
+    return _key
+end
+
 local generate_UIBox_ability_tableref = Card.generate_UIBox_ability_table
 function Card.generate_UIBox_ability_table(self, ...)
     local full_UI_table = generate_UIBox_ability_tableref(self, ...)
@@ -19,22 +39,4 @@ function Card.generate_UIBox_ability_table(self, ...)
 
 
     return full_UI_table
-end
-
-function Blockbuster.get_localization_key_for_valmanip_standard(card)
-    local _key = Blockbuster.get_standard_from_card(card)
-    if _key == nil then
-        _key = "none"
-    else
-        
-        if Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key then
-            _key = Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key
-        end
-
-        if not Blockbuster.value_manipulation_compat(card, _key) then
-            _key = "none"
-        end
-    end
-
-    return _key
 end

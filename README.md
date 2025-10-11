@@ -63,6 +63,14 @@ exempt_jokers = {
     j_mymod_myexemptjoker = true
 }
 
+If your mod was not prepared for this type of value manipulation, there's a chance your scaling jokers store their total stacked values in variables with the same names as those of non-scaling jokers. But it might be a lot of work to set up an individual override for every of those jokers. For this, you can set up `` redirect_objects = {}``, to redirect specific jokers to use another standard. This allows you to use multiple standards, as long as you maintain a single main one. This table should be formatted as such:
+
+redirect_objects = {
+    key_of_altCompatStandard = {
+        j_mymod_myexemptjoker = true
+    }
+}
+
 # Creating Object specific exceptions
 
 Your mod may have jokers that need more specific instructions, or don't actually function easily with the standard you want to use. You can add a variable named 'bb_alternate_standard' to your joker's code, and pass a CompatStandard key. In that case, regardless of source mod, the the alternate standard will be used. 

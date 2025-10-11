@@ -1,11 +1,22 @@
+---Returns Mod ID of target card's source mod
+---@param card Card
+---@return string? 
 function Blockbuster.get_mod_id_from_card(card)
-
     if card then
-        if card.config.center and card.config.center.original_mod then
-            return card.config.center.original_mod.id
+        -- convert card to just the center
+        local _center = nil
+
+        if type(card) == "string" then
+            _center = G.P_CENTERS[card]
+        else 
+            _center = card.config and card.config.center
         end
 
-        if card.config.center and not card.config.center.original_mod then
+        if _center and _center.original_mod then
+            return _center.original_mod.id
+        end
+
+        if _center and not _center.original_mod then
             return "Vanilla"
         end
     else
@@ -14,14 +25,23 @@ function Blockbuster.get_mod_id_from_card(card)
     
 end
 
+---Returns CompatStandard key of target card
+---@param card Card
+---@return string?
 function Blockbuster.get_standard_from_card(card)
     if not card then
-        print("DEBUG: No card object")
         return nil
     end
 
-    if card.config.center.bb_alternate_standard then
-        return card.config.center.bb_alternate_standard
+    local _center = nil
+    if type(card) == "string" then
+        _center = G.P_CENTERS[card]
+    else 
+        _center = card.config and card.config.center
+    end
+
+    if _center.bb_alternate_standard then
+        return _center.bb_alternate_standard
     end
 
     local _mod_id = Blockbuster.get_mod_id_from_card(card)
@@ -45,6 +65,10 @@ function Blockbuster.get_standard_from_card(card)
 
 end
 
+---Return whether card is compatible with value manipulation based on its standard
+---@param card Card
+---@param string Standard
+---@return boolean
 function Blockbuster.value_manipulation_compat(card, standard)
     if not standard then 
         return nil
@@ -61,6 +85,10 @@ function Blockbuster.value_manipulation_compat(card, standard)
     end
 end
 
+---Returns keys of all value manipulation sources currently affecting target
+---@param card Card
+---@param partial_key_match string Set up to only include keys that contain string
+---@return table
 function Blockbuster.get_keys_of_value_manip_sources(card, partial_key_match)
     local _table = {}
 
@@ -79,6 +107,9 @@ function Blockbuster.get_keys_of_value_manip_sources(card, partial_key_match)
     return _table
 end
 
+---Returns whether card is value manip compatible generally
+---@param card Card
+---@return boolean
 function Blockbuster.is_value_manip_compatible(card)
     if not card or not card.config or not card.config.center then
         return false

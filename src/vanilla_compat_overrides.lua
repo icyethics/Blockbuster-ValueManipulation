@@ -1,3 +1,5 @@
+---Table of vanilla joker keys that depend on hardcoded compatibility
+---@class vanilla_exemption_joker_list
 Blockbuster.ValueManipulation.vanilla_exemption_joker_list = {
     j_joker = true,
 
@@ -27,6 +29,10 @@ Blockbuster.ValueManipulation.vanilla_exemption_joker_list = {
     j_yorick = true,
 }
 
+---Hardcoded behaviour to deal with incompatible vanilla code
+---@param card Card
+---@param source string Key to store multiplier
+---@param num number 
 function Blockbuster.value_manipulation_vanilla_card(card, source, num)
     local _multipliers = card.ability.blockbuster_multipliers
 
@@ -164,6 +170,7 @@ function Blockbuster.value_manipulation_vanilla_card(card, source, num)
     end
 end
 
+---Take Ownership functions to introduce joker specific standards to vanilla jokers
 function Blockbuster.vanilla_joker_qualities()
 
     local _chips_jokers = {"runner", "square", "castle", "wee", "stuntman"}

@@ -1,6 +1,15 @@
 Blockbuster.ValueManipulation.CompatStandards = {}
 Blockbuster.ValueManipulation.ModToCompatStandard = {}
 
+---Object containing information on how to process variables to manipulate their values
+---@class CompatStandard
+---@field variable_conventions? table[full_vars: table, ends_on: table, starts_with: table] Table containing naming conventions to mark for exclusion for Value Manipulation
+---@field integer_only_variable_conventions? table[full_vars: table, ends_on: table, starts_with: table] naming conventions for values that should only be changed into integers
+---@field variable_caps? table Dictionary with variables and associated maximum values
+---@field min_max_values? table[min: num, max: num] Minimum and Maximum total value multiplication that standards allows for
+---@field exempt_jokers? table Dictionary of keys of objects to make incompatible with value manipulation
+---@field redirect_objects? table[key: table] Dictionary of redirection paths, indicating which joker to redirect to which standard
+---@field source_mod? string Key matching Source Mod ID to set as default
 Blockbuster.ValueManipulation.CompatStandard = SMODS.GameObject:extend {
     obj_table = Blockbuster.ValueManipulation.CompatStandards,
     obj_buffer = {},
@@ -48,6 +57,11 @@ Blockbuster.ValueManipulation.CompatStandard = SMODS.GameObject:extend {
     end
 }
 
-function Blockbuster.RegisterCompatStandardWithMod(key_to_standard, mod_id)
+
+---Registers the Standard to be the default for a Specific mod
+---@param key_to_standard string
+---@param mod_id string
+Blockbuster.RegisterCompatStandardWithMod = function(key_to_standard, mod_id)
     Blockbuster.ValueManipulation.ModToCompatStandard[mod_id] = key_to_standard
 end
+

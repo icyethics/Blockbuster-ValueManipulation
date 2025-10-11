@@ -1,8 +1,11 @@
 -- Setting variables to use for other mods to test whether this mod is loaded
+
 if not Blockbuster then
+    ---@class Blockbuster
     Blockbuster = {}
 end
 
+---@class ValueManipulation
 Blockbuster.ValueManipulation = {}
 Blockbuster.ValueManipulation.mod_dir = ''..SMODS.current_mod.path
 
@@ -46,4 +49,5 @@ for _index, _folder in ipairs(_list_of_folders) do
     end
 end
 
+-- This exists to hardcode in vanilla compatibility
 Blockbuster.vanilla_joker_qualities()

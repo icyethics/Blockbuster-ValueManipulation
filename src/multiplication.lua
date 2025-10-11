@@ -1,3 +1,8 @@
+---Apply value manipulation to target card
+---@param card Card
+---@param source string Source that will store value change
+---@param num number Value that will be used to multiply values with
+---@return boolean Returns true if successfully applied
 function Card:bb_set_multiplication_bonus(card, source, num)
 
     -- Gather the right value manipulation method
@@ -107,6 +112,10 @@ function Card:bb_set_multiplication_bonus(card, source, num)
     return true
 end
 
+---Returns the current value of value manip from given source on target card
+---@param card Card
+---@param source string Source that will store value change 
+---@return number
 function Card:get_multiplier_by_source(card, source)
     if not card or not card.ability or 
     not card.ability.blockbuster_multipliers or 
@@ -117,6 +126,9 @@ function Card:get_multiplier_by_source(card, source)
     return card.ability.blockbuster_multipliers[source]
 end
 
+---Returns total value of multipliers on target card
+---@param card Card
+---@return number
 function Card:get_total_multiplier(card)
     if not card or not card.ability or 
     not card.ability.blockbuster_multipliers then
@@ -131,9 +143,12 @@ function Card:get_total_multiplier(card)
     return _total
 end
 
+---Manipulate values of target card
+---@param card Card
+---@param source string Key to store source under
+---@param num number Value to turn multiplier into
+---@param change? boolean If True will add num to existing value manip given by this source, rather than overwrite it
 function Blockbuster.manipulate_value(card, source, num, change)
-    print("test entry")
-
     if not card or not source or not num then
         return false
     end
@@ -168,6 +183,9 @@ function Blockbuster.manipulate_value(card, source, num, change)
     end
 end
 
+---Resets target sources of value manipulation on target
+---@param card Card Target
+---@param sources string|table Key or table of keys, will only reset matching keys
 function Blockbuster.reset_value_multiplication(card, sources)
     if not card or not sources then
         return false
@@ -184,6 +202,8 @@ function Blockbuster.reset_value_multiplication(card, sources)
 
 end
 
+---Resets all values manipulation on target
+---@param card Card
 function Blockbuster.remove_all_value_multiplication(card)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
@@ -192,6 +212,9 @@ function Blockbuster.remove_all_value_multiplication(card)
     end
 end
 
+---Resets target sources of value manipulation on target if keys are full or partial match
+---@param card Card Target
+---@param sources string
 function Blockbuster.remove_value_multiplication_if_partial_key_match(card, partial_key_match)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do

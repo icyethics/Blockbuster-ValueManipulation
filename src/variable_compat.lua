@@ -1,3 +1,8 @@
+---Checks variable name against standard conventions to judge value manip compatibility
+---@param name string Key of target variable
+---@param compat_standard_key string Key of CompatStandard used
+---@param override CompatStandard CompatStandard or table with shared format to use instead of assumed standard
+---@return boolean Returns True if compatible
 function Blockbuster.check_variable_validity_for_mult(name, compat_standard_key, override)
 
     if not compat_standard_key and not override then return false end
@@ -33,10 +38,14 @@ function Blockbuster.check_variable_validity_for_mult(name, compat_standard_key,
         end
     end
 
-
     return true
 end
 
+---Checks variable name against standard conventions to judge if value must be rounded to integer
+---@param name string Key of target variable
+---@param compat_standard_key string Key of CompatStandard used
+---@param override CompatStandard CompatStandard or table with shared format to use instead of assumed standard
+---@return boolean Returns True if value must be Integer
 function Blockbuster.check_variable_validity_for_int_only(name, compat_standard_key, override)
     
     if not compat_standard_key and not override then return false end
@@ -71,7 +80,6 @@ function Blockbuster.check_variable_validity_for_int_only(name, compat_standard_
             return true
         end
     end
-
 
     return false
 end
