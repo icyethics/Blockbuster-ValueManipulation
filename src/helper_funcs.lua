@@ -40,6 +40,10 @@ function Blockbuster.get_standard_from_card(card)
         _center = card.config and card.config.center
     end
 
+    if _center == nil then
+        return nil
+    end
+
     if _center.bb_alternate_standard then
         return _center.bb_alternate_standard
     end

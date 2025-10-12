@@ -4,6 +4,9 @@
 ---@param num number Value that will be used to multiply values with
 ---@return boolean Returns true if successfully applied
 function Card:bb_set_multiplication_bonus(card, source, num)
+    if not card or not card.ability then
+        return nil
+    end
 
     -- Gather the right value manipulation method
     local _standard = Blockbuster.get_standard_from_card(card)
@@ -41,17 +44,13 @@ function Card:bb_set_multiplication_bonus(card, source, num)
 
     -- Add the source, or replace it if already existing
     if _source and _num then
-        if card.ability.blockbuster_multipliers[_source] == _num then
+        if card.ability.blockbuster_multipliers[_source] ~= nil and _num == 1 then
+            card.ability.blockbuster_multipliers[source] = nil
+        elseif card.ability.blockbuster_multipliers[_source] == _num then
             return false
-        elseif card.ability.blockbuster_multipliers[_source] ~= nil and _num == 1 then
-            for index, item in ipairs(card.ability.blockbuster_multipliers) do
-                if card.ability.blockbuster_multipliers[_source] == item then
-                    table.remove(card.ability.blockbuster_multipliers, index)
-                end    
-            end
+        elseif _num ~= 1 then
+            _multipliers[_source] = _num      
         end 
-
-        _multipliers[_source] = _num        
     end
 
     local _cardextra = card and card.ability.extra
@@ -138,7 +137,9 @@ function Card:get_total_multiplier(card)
     local _total = 0
 
     for _source, _mult in pairs(card.ability.blockbuster_multipliers) do
-        _total = _total + _mult
+        if _mult > 1 then
+            _total = _total + _mult
+        end
     end
     return _total
 end
