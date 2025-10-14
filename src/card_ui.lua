@@ -6,7 +6,7 @@ Blockbuster.get_localization_key_for_valmanip_standard = function(card)
     if _key == nil then
         _key = "none"
     else
-        if Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key then
+        if Blockbuster.ValueManipulation.CompatStandards[_key] and Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key then
             _key = Blockbuster.ValueManipulation.CompatStandards[_key].alt_loc_key
         end
 
