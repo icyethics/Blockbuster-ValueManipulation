@@ -48,8 +48,11 @@ function Blockbuster.Debug.cardPrintValueKeys(arg)
     end
 
     if _card then
+        for _key, _value in ipairs(_card.config.ability) do
+            print("ability." .. _key)
+        end
         for _key, _value in ipairs(_card.config.ability.extra) do
-            print(_key)
+            print("ability.extra." .. _key)
         end
         return true
     else
