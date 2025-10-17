@@ -51,6 +51,9 @@ Blockbuster.ValueManipulation.CompatStandard{
         j_mr_bones = true,
         j_perkeo = true,
         j_business = true,
+
+        -- ENHANCEMENTS
+        m_wild = true,
     },
     variable_conventions = {
         full_vars = {

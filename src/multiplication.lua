@@ -2,8 +2,9 @@
 ---@param card Card
 ---@param source string Source that will store value change
 ---@param num number Value that will be used to multiply values with
+---@param exclude_layers table Table with strings of layers to exclude (Edition)
 ---@return boolean Returns true if successfully applied
-function Card:bb_set_multiplication_bonus(card, source, num)
+function Card:bb_set_multiplication_bonus(card, source, num, exclude_layers)
     if not card or not card.ability then
         return nil
     end
@@ -57,16 +58,33 @@ function Card:bb_set_multiplication_bonus(card, source, num)
     local _cardextra = card and card.ability.extra
     local _baseextra = card.ability.base
 
-    _tables_to_check[1] = {target = (card and card.ability) and card.ability.extra, base = card.ability.base}
+    -- The extra table is assumed to be generic and exist on every object
+    if not (exclude_layers and exclude_layers.base) then
+        _tables_to_check[#_tables_to_check + 1] = {target = (card and card.ability) and card.ability.extra, base = card.ability.base}
 
-    if card and card.ability and card.ability.consumeable then
-        if not card.ability.base_consumeable then card.ability.base_consumeable = card.config.center.config end
-        _tables_to_check[2] = {target = card.ability.consumeable, base = card.ability.base_consumeable}
-        _tables_to_check[3] = {target = card.config.center.config, base = card.ability.base_consumeable}
-        _tables_to_check[4] = {target = card.ability, base = card.ability.base_consumeable}
+        -- These tables are only checked if the object is a consumeable
+        if card and card.ability and card.ability.consumeable  then
+            local _reference_config = G.P_CENTERS[card.config.center.key].config
+
+            if not card.ability.base_consumeable then card.ability.base_consumeable = _reference_config end
+            _tables_to_check[#_tables_to_check + 1] = {target = card.ability.consumeable, base = card.ability.base_consumeable}
+            _tables_to_check[#_tables_to_check + 1] = {target = card.ability, base = card.ability.base_consumeable}
+        end
     end
-    
 
+    -- Logic to handle editons
+    if card and card.ability and card.edition ~= nil and not (exclude_layers and exclude_layers.enhancement) then
+        
+        local _reference_config = G.P_CENTERS[card.edition.key].config
+        _tables_to_check[#_tables_to_check + 1] = {target = card.edition, base = _reference_config}
+    end
+
+    -- Logic to handle seals (Unfinished)
+    -- if card and card.ability and card.ability.seal ~= nil then
+    --     local _reference_config = G.P_CENTERS[card.seal].config
+    --     _tables_to_check[#_tables_to_check + 1] = {target = card.ability.seal, base = _reference_config}
+    --     _tables_to_check[#_tables_to_check + 1] = {target = card.seal.config, base = _reference_config}
+    -- end
 
     -- Override is the personal standard that's on the joker object itself
     local _override = nil
@@ -77,49 +95,6 @@ function Card:bb_set_multiplication_bonus(card, source, num)
     for _index, _table_set in ipairs(_tables_to_check) do
         Blockbuster.change_values_in_table(card, _table_set.target, _table_set.base, _standard, _multipliers, _override)
     end
-    
-
-    -- if type(_cardextra) ~= 'table' then
-    --     if Blockbuster.check_variable_validity_for_mult("extra", _standard, _override) and type(_cardextra) == "number" then
-
-    --         _cardextra = _baseextra
-
-    --         for source, mult in pairs(_multipliers) do
-    --             _cardextra = _cardextra * mult
-    --             card.ability.extra = _cardextra
-    --         end
-    --     end
-    -- else
-    --     for name, value in pairs(_cardextra) do
-
-    --         -- check the values
-
-    --         if Blockbuster.check_variable_validity_for_mult(name, _standard, _override) and type(_cardextra[name]) == "number" then
-    --             _cardextra[name] = _baseextra[name]
-    --             for source, mult in pairs(_multipliers) do
-    --                 _cardextra[name] = _cardextra[name] * mult
-    --             end
-
-    --             if Blockbuster.check_variable_validity_for_int_only(name, _standard, _override) then
-    --                 _cardextra[name] = math.floor(_cardextra[name] + 0.5)
-    --             end
-
-    --             if (not _override and _standardObj and _standardObj.variable_caps and _standardObj.variable_caps[name]) or
-    --             _override and _override.variable_caps and _override.variable_caps[name] then
-    --                 local _usedStandard = _override or _standardObj
-    --                 _cardextra[name] = math.min(_cardextra[name], _usedStandard.variable_caps[name])                    
-    --             end
-
-    --             if (not _override and _standardObj and _standardObj.min_max_values) or
-    --             (_override and _override.min_max_values) then
-    --                 local _usedStandard = _override or _standardObj 
-    --                 local _min = _usedStandard.min_max_values.min
-    --                 local _max = _usedStandard.min_max_values.max
-    --                 _cardextra[name] = math.min(math.max(_cardextra[name], (_baseextra[name] * _min)), _baseextra[name] * _max)
-    --             end
-    --         end
-    --     end
-    -- end
 
     if Blockbuster.ValueManipulation.vanilla_exemption_joker_list[card.config.center.key] then
         Blockbuster.value_manipulation_vanilla_card(card, source, num)
@@ -128,13 +103,16 @@ function Card:bb_set_multiplication_bonus(card, source, num)
     return true
 end
 
+debugglobal = 0
 ---Changes the specific value passed through, if it is compatible
 function Blockbuster.change_values_in_table(card, value_table, reference_table, standard, multiplier_table, override)
+    debugglobal = debugglobal + 1
     local _standardObj = Blockbuster.ValueManipulation.CompatStandards[standard]
 
     if type(value_table) ~= 'table' then
         if Blockbuster.check_variable_validity_for_mult("extra", standard, override) and type(value_table) == "number" then
 
+            if type(reference_table) == 'table' then print("emergency, something is going wrong here!") end
             value_table = reference_table
 
             for source, mult in pairs(multiplier_table) do
@@ -143,21 +121,16 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
             end
         end
     else
+        
         for name, value in pairs(value_table) do
-            
 
             -- check the values
-
             if Blockbuster.check_variable_validity_for_mult(name, standard, override) and type(value_table[name]) == "number" and
             reference_table[name] then
-                print(name .. " & " .. value)
+                
                 value_table[name] = reference_table[name]
-                print(name .. ": " .. reference_table[name])
-                print(name .. "(REAL): " .. value_table[name])
                 for source, mult in pairs(multiplier_table) do
-                    print("manipulating " .. name .. " with " .. mult .. "mult, provided by " .. source)
                     value_table[name] = value_table[name] * mult
-                    print(name .. "(REAL-post-manip): " .. value_table[name])
                 end
 
                 if Blockbuster.check_variable_validity_for_int_only(name, standard, override) then
@@ -177,10 +150,8 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
                     local _max = _usedStandard.min_max_values.max
                     value_table[name] = math.min(math.max(value_table[name], (reference_table[name] * _min)), reference_table[name] * _max)
                 end
-            end
 
-            print(name .. "(FINAL): " .. value_table[name])
-            print(name .. " & " .. value .. " ARE DONE")
+            end
         end
     end
 end
@@ -223,7 +194,7 @@ end
 ---@param source string Key to store source under
 ---@param num number Value to turn multiplier into
 ---@param change? boolean If True will add num to existing value manip given by this source, rather than overwrite it
-function Blockbuster.manipulate_value(card, source, num, change)
+function Blockbuster.manipulate_value(card, source, num, change, exclude_layers)
     if not card or not source or not num then
         return false
     end
@@ -272,7 +243,7 @@ function Blockbuster.reset_value_multiplication(card, sources)
     end
 
     for _index, _source in ipairs(sources) do
-        card.bb_set_multiplication_bonus(card, _source, 1)
+        card:bb_set_multiplication_bonus(card, _source, 1)
     end
 
 end
@@ -282,7 +253,7 @@ end
 function Blockbuster.remove_all_value_multiplication(card)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
-            card.bb_set_multiplication_bonus(card, _key, 1)
+            card:bb_set_multiplication_bonus(card, _key, 1)
         end
     end
 end
@@ -294,7 +265,7 @@ function Blockbuster.remove_value_multiplication_if_partial_key_match(card, part
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
             if string.find(_key, partial_key_match) then
-                card.bb_set_multiplication_bonus(card, _key, 1)
+                card:bb_set_multiplication_bonus(card, _key, 1)
             end
         end
     end
