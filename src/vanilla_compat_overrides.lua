@@ -106,11 +106,11 @@ function Blockbuster.value_manipulation_vanilla_card(card, source, num)
 
     -- Popcorn
     if card.config.center.key == "j_popcorn" then
-        if not card.ability.base then
-            card.ability.base = card.ability.mult
+        if not card.ability.base_mult then
+            card.ability.base_mult = card.ability.mult
         end
 
-        card.ability.mult = card.ability.base
+        card.ability.mult = card.ability.base_mult
         for source, mult in pairs(_multipliers) do
             card.ability.mult = card.ability.mult * mult
         end

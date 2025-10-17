@@ -77,49 +77,6 @@ function Card:bb_set_multiplication_bonus(card, source, num)
     for _index, _table_set in ipairs(_tables_to_check) do
         Blockbuster.change_values_in_table(card, _table_set.target, _table_set.base, _standard, _multipliers, _override)
     end
-    
-
-    -- if type(_cardextra) ~= 'table' then
-    --     if Blockbuster.check_variable_validity_for_mult("extra", _standard, _override) and type(_cardextra) == "number" then
-
-    --         _cardextra = _baseextra
-
-    --         for source, mult in pairs(_multipliers) do
-    --             _cardextra = _cardextra * mult
-    --             card.ability.extra = _cardextra
-    --         end
-    --     end
-    -- else
-    --     for name, value in pairs(_cardextra) do
-
-    --         -- check the values
-
-    --         if Blockbuster.check_variable_validity_for_mult(name, _standard, _override) and type(_cardextra[name]) == "number" then
-    --             _cardextra[name] = _baseextra[name]
-    --             for source, mult in pairs(_multipliers) do
-    --                 _cardextra[name] = _cardextra[name] * mult
-    --             end
-
-    --             if Blockbuster.check_variable_validity_for_int_only(name, _standard, _override) then
-    --                 _cardextra[name] = math.floor(_cardextra[name] + 0.5)
-    --             end
-
-    --             if (not _override and _standardObj and _standardObj.variable_caps and _standardObj.variable_caps[name]) or
-    --             _override and _override.variable_caps and _override.variable_caps[name] then
-    --                 local _usedStandard = _override or _standardObj
-    --                 _cardextra[name] = math.min(_cardextra[name], _usedStandard.variable_caps[name])                    
-    --             end
-
-    --             if (not _override and _standardObj and _standardObj.min_max_values) or
-    --             (_override and _override.min_max_values) then
-    --                 local _usedStandard = _override or _standardObj 
-    --                 local _min = _usedStandard.min_max_values.min
-    --                 local _max = _usedStandard.min_max_values.max
-    --                 _cardextra[name] = math.min(math.max(_cardextra[name], (_baseextra[name] * _min)), _baseextra[name] * _max)
-    --             end
-    --         end
-    --     end
-    -- end
 
     if Blockbuster.ValueManipulation.vanilla_exemption_joker_list[card.config.center.key] then
         Blockbuster.value_manipulation_vanilla_card(card, source, num)
@@ -145,19 +102,15 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
     else
         for name, value in pairs(value_table) do
             
-
             -- check the values
 
             if Blockbuster.check_variable_validity_for_mult(name, standard, override) and type(value_table[name]) == "number" and
             reference_table[name] then
-                print(name .. " & " .. value)
+
                 value_table[name] = reference_table[name]
-                print(name .. ": " .. reference_table[name])
-                print(name .. "(REAL): " .. value_table[name])
+
                 for source, mult in pairs(multiplier_table) do
-                    print("manipulating " .. name .. " with " .. mult .. "mult, provided by " .. source)
                     value_table[name] = value_table[name] * mult
-                    print(name .. "(REAL-post-manip): " .. value_table[name])
                 end
 
                 if Blockbuster.check_variable_validity_for_int_only(name, standard, override) then
@@ -178,9 +131,6 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
                     value_table[name] = math.min(math.max(value_table[name], (reference_table[name] * _min)), reference_table[name] * _max)
                 end
             end
-
-            print(name .. "(FINAL): " .. value_table[name])
-            print(name .. " & " .. value .. " ARE DONE")
         end
     end
 end
@@ -272,7 +222,7 @@ function Blockbuster.reset_value_multiplication(card, sources)
     end
 
     for _index, _source in ipairs(sources) do
-        card.bb_set_multiplication_bonus(card, _source, 1)
+        card:bb_set_multiplication_bonus(card, _source, 1)
     end
 
 end
@@ -282,7 +232,7 @@ end
 function Blockbuster.remove_all_value_multiplication(card)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
-            card.bb_set_multiplication_bonus(card, _key, 1)
+            card:bb_set_multiplication_bonus(card, _key, 1)
         end
     end
 end
@@ -294,7 +244,7 @@ function Blockbuster.remove_value_multiplication_if_partial_key_match(card, part
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
             if string.find(_key, partial_key_match) then
-                card.bb_set_multiplication_bonus(card, _key, 1)
+                card:bb_set_multiplication_bonus(card, _key, 1)
             end
         end
     end
