@@ -172,15 +172,15 @@ function Blockbuster.Debug.valManipMult()
     end
 end
 
-function bb_constest()
-    Blockbuster.manipulate_value(G.consumeables.cards[1], 'r', 2)
+function bb_constest(val)
+    Blockbuster.manipulate_value(G.consumeables.cards[1], 'r', val or 2)
 end
-function bb_handtest()
-    Blockbuster.manipulate_value(G.hand.cards[1], 'r', 2)
+function bb_handtest(val)
+    Blockbuster.manipulate_value(G.hand.cards[1], 'r', val or 2)
 end
 function bb_handtest2()
     for _index, _card in ipairs(G.hand.cards) do
-        Blockbuster.manipulate_value(_card, 'r', 2)
+        Blockbuster.manipulate_value(_card, 'r', val or 2)
     end
    
 end
