@@ -114,34 +114,27 @@ function Blockbuster.value_manipulation_vanilla_card(card, source, num)
 
 
     -- Popcorn
-    if card.config.center.key == "j_popcorn" then
-        if not card.ability.base_set then
-            card.ability.base = card.ability.mult
-            card.ability.base_set = true
-        end
+    local _food_joker_table = {
+        {key = "j_popcorn", value = "mult", base_value = 4},
+        {key = "j_ramen", value = "x_mult", base_value = 0.01},
+    }
+ 
+    for _index, _dict in ipairs(_food_joker_table) do
+        if card.config.center.key == _dict.key then
+            if not card.ability.base_set then
+                card.ability.base = card.ability[_dict.value]
+                card.ability.base_set = true
+            end
 
-        
-        -- Keeps into account any changes that originated from other systems than this one
-        local _current_value = card.ability.mult
-        local _no_changes_result = card.ability.base * ((card.ability.last_multiplication and card.ability.last_multiplication ~= 0) and card.ability.last_multiplication or 1)
-        local _calculate_from = card.ability.base + (_current_value - _no_changes_result)
-        
-        card.ability.mult = _calculate_from
-        for source, mult in pairs(_multipliers) do
-            card.ability.mult = card.ability.mult * mult
-        end
-        card.ability.extra = 4
-    end
+            local _current_value = card.ability[_dict.value]
+            local _no_changes_result = card.ability.base * ((card.ability.last_multiplication and card.ability.last_multiplication ~= 0) and card.ability.last_multiplication or 1)
+            local _calculate_from = card.ability.base + (_current_value - _no_changes_result)
 
-    -- Ramen
-    if card.config.center.key == "j_ramen" then
-        if not card.ability.base then
-            card.ability.base = card.ability.Xmult
-        end
-
-        card.ability.Xmult = card.ability.base
-        for source, mult in pairs(_multipliers) do
-            card.ability.Xmult = card.ability.Xmult * mult
+            card.ability[_dict.value] = _calculate_from
+            for source, mult in pairs(_multipliers) do
+                card.ability[_dict.value] = card.ability[_dict.value] * mult
+            end
+            card.ability.extra = _dict.base_value
         end
     end
 

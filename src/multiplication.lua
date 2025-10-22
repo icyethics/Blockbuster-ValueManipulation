@@ -2,11 +2,15 @@
 ---@param card Card
 ---@param source string Source that will store value change
 ---@param num number Value that will be used to multiply values with
----@param include_layers table Dictionary marked with layers to include (All, Base, Center (default), Edition)
+---@param include_layers? table Dictionary marked with layers to include (All, Bonus, Base, Center (default), Edition)
 ---@return boolean Returns true if successfully applied
 function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
     if not card or not card.ability then
         return nil
+    end
+
+    if not include_layers then
+        include_layers = {Center = true}
     end
 
     -- Gather the right value manipulation method
@@ -60,7 +64,7 @@ function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
     local _baseextra = card.ability.base
 
     -- The extra table is assumed to be generic and exist on every object
-    if not include_layers or include_layers.All or include_layers.Base then
+    if not include_layers or include_layers.All or include_layers.Center then
         _tables_to_check[#_tables_to_check + 1] = {target = (card and card.ability) and card.ability.extra, base = card.ability.base}
 
         -- These tables are only checked if the object is a consumeable
@@ -74,12 +78,17 @@ function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
     end
 
     -- Logic to handle editons
-    if card and card.ability and card.edition ~= nil and not (include_layers and include_layers.enhancement) then
+    if card and card.ability and card.edition ~= nil and (include_layers.All or include_layers.Edition) then
         
         local _reference_config = G.P_CENTERS[card.edition.key].config
         _tables_to_check[#_tables_to_check + 1] = {target = card.edition, base = _reference_config}
     end
 
+    -- Logic to handle base card bonuses
+    if card and card.ability and (include_layers.All or include_layers.Base or include_layers.Bonus) then
+        local _reference_config = card.ability.base_bonus_table or Blockbuster.construct_perma_bonus_table(card)
+        _tables_to_check[#_tables_to_check + 1] = {target = card.ability, base = _reference_config}
+    end
     -- Logic to handle seals (Unfinished)
     -- if card and card.ability and card.ability.seal ~= nil then
     --     local _reference_config = G.P_CENTERS[card.seal].config
@@ -135,11 +144,9 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
             if Blockbuster.check_variable_validity_for_mult(name, standard, override) and type(value_table[name]) == "number" and
             reference_table[name] then
                 
-                
-
                 -- Keeps into account any changes that originated from other systems than this one
                 local _current_value = value_table[name]
-                local _no_changes_result = reference_table[name] * card.ability.last_multiplication
+                local _no_changes_result = reference_table[name] * (card.ability.last_multiplication ~= 0 and card.ability.last_multiplication or 1)
                 local _calculate_from = reference_table[name] + (_current_value - _no_changes_result) 
 
                 value_table[name] = _calculate_from
@@ -206,8 +213,9 @@ end
 ---@param card Card
 ---@param source string Key to store source under
 ---@param num number Value to turn multiplier into
+---@param include_layer? table Dictionary indicating targeted layers. Defaults to Center if absent
 ---@param change? boolean If True will add num to existing value manip given by this source, rather than overwrite it
-function Blockbuster.manipulate_value(card, source, num, change, include_layers)
+function Blockbuster.manipulate_value(card, source, num, include_layers, change)
     if not card or not source or not num then
         return false
     end
@@ -229,12 +237,12 @@ function Blockbuster.manipulate_value(card, source, num, change, include_layers)
 
     -- quantum remove from deck to allow for specific effects
     if not card.added_to_deck then
-        card:bb_set_multiplication_bonus(card, source, num)
+        card:bb_set_multiplication_bonus(card, source, num, include_layers)
         return true
     else
         card.from_quantum = true
         card:remove_from_deck(true)
-        card:bb_set_multiplication_bonus(card, source, num)
+        card:bb_set_multiplication_bonus(card, source, num, include_layers)
         card:add_to_deck(true)
         card.from_quantum = true
 
@@ -245,7 +253,8 @@ end
 ---Resets target sources of value manipulation on target
 ---@param card Card Target
 ---@param sources string|table Key or table of keys, will only reset matching keys
-function Blockbuster.reset_value_multiplication(card, sources)
+---@param include_layer table Dictionary indicating targeted layers. Defaults to Center if absent
+function Blockbuster.reset_value_multiplication(card, sources, include_layer)
     if not card or not sources then
         return false
     end
@@ -256,7 +265,7 @@ function Blockbuster.reset_value_multiplication(card, sources)
     end
 
     for _index, _source in ipairs(sources) do
-        card:bb_set_multiplication_bonus(card, _source, 1)
+        card:bb_set_multiplication_bonus(card, _source, 1, include_layer)
     end
 
 end
@@ -266,20 +275,43 @@ end
 function Blockbuster.remove_all_value_multiplication(card)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
-            card:bb_set_multiplication_bonus(card, _key, 1)
+            card:bb_set_multiplication_bonus(card, _key, 1, {All = true})
         end
     end
 end
 
 ---Resets target sources of value manipulation on target if keys are full or partial match
 ---@param card Card Target
----@param sources string
-function Blockbuster.remove_value_multiplication_if_partial_key_match(card, partial_key_match)
+---@param partial_key_match string
+---@param include_layer table Dictionary indicating targeted layers. Defaults to Center if absent
+function Blockbuster.remove_value_multiplication_if_partial_key_match(card, partial_key_match, include_layer)
     if card and card.ability and card.ability.multiplier then
         for _key, _mult in pairs(card.ability.multiplier) do
             if string.find(_key, partial_key_match) then
-                card:bb_set_multiplication_bonus(card, _key, 1)
+                card:bb_set_multiplication_bonus(card, _key, 1, include_layer)
             end
         end
     end
+end
+
+function Blockbuster.construct_perma_bonus_table(card)
+
+    local _perma_table = {
+        perma_x_chips = card.ability.perma_x_chips ~= 0 and (card.ability.perma_x_chips + 1) or 0,
+        perma_mult = card.ability.perma_mult ~= 0 and card.ability.perma_mult or 0,
+        perma_x_mult = card.ability.perma_x_mult ~= 0 and (card.ability.perma_x_mult + 1) or 0,
+        perma_h_chips = card.ability.perma_h_chips ~= 0 and card.ability.perma_h_chips or 0,
+        perma_h_x_chips = card.ability.perma_h_x_chips ~= 0 and (card.ability.perma_h_x_chips + 1) or 0,
+        perma_h_mult = card.ability.perma_h_mult ~= 0 and card.ability.perma_h_mult or 0,
+        perma_h_x_mult = card.ability.perma_h_x_mult ~= 0 and (card.ability.perma_h_x_mult + 1) or 0,
+        perma_p_dollars = card.ability.perma_p_dollars ~= 0 and card.ability.perma_p_dollars or 0,
+        perma_h_dollars = card.ability.perma_h_dollars ~= 0 and card.ability.perma_h_dollars or 0,
+        bonus = card.ability.bonus ~= 0 and card.ability.bonus or 0,
+        perma_bonus = card.ability.perma_bonus ~= 0 and card.ability.perma_bonus or 0,
+        bonus_repetitions = card.ability.perma_repetitions ~= 0 and card.ability.perma_repetitions or 0,
+    }
+
+    card.ability.base_bonus_table = _perma_table   
+
+    return _perma_table
 end

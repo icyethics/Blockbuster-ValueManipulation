@@ -178,9 +178,9 @@ end
 function bb_handtest(val)
     Blockbuster.manipulate_value(G.hand.cards[1], 'r', val or 2)
 end
-function bb_handtest2()
+function bb_handtest2(val)
     for _index, _card in ipairs(G.hand.cards) do
-        Blockbuster.manipulate_value(_card, 'r', val or 2)
+        Blockbuster.manipulate_value(_card, 'r', val or 2, {Base = true})
     end
    
 end
