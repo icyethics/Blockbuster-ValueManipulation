@@ -115,20 +115,17 @@ function Blockbuster.value_manipulation_vanilla_card(card, source, num)
 
     -- Popcorn
     if card.config.center.key == "j_popcorn" then
-        if not card.ability.base then
+        if not card.ability.base_set then
             card.ability.base = card.ability.mult
+            card.ability.base_set = true
         end
 
         
         -- Keeps into account any changes that originated from other systems than this one
         local _current_value = card.ability.mult
-        print(_current_value)
         local _no_changes_result = card.ability.base * ((card.ability.last_multiplication and card.ability.last_multiplication ~= 0) and card.ability.last_multiplication or 1)
-        print(card.ability.base .. " * " .. card.ability.last_multiplication .. " = " .. _no_changes_result)
-        local _calculate_from = _no_changes_result + (_current_value - _no_changes_result)
-        print(_no_changes_result .. " + (" .. _current_value .. " - " .. _no_changes_result .. ") = " .. _calculate_from) 
+        local _calculate_from = card.ability.base + (_current_value - _no_changes_result)
         
-
         card.ability.mult = _calculate_from
         for source, mult in pairs(_multipliers) do
             card.ability.mult = card.ability.mult * mult

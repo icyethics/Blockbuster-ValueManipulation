@@ -64,7 +64,7 @@ function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
         _tables_to_check[#_tables_to_check + 1] = {target = (card and card.ability) and card.ability.extra, base = card.ability.base}
 
         -- These tables are only checked if the object is a consumeable
-        if card and card.ability and card.ability.consumeable  then
+        if card and card.ability and card.ability.consumeable then
             local _reference_config = G.P_CENTERS[card.config.center.key].config
 
             if not card.ability.base_consumeable then card.ability.base_consumeable = copy_table(_reference_config) end
@@ -87,7 +87,7 @@ function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
     --     _tables_to_check[#_tables_to_check + 1] = {target = card.seal.config, base = _reference_config}
     -- end
 
-    Blockbuster.add_table_to_value_manipulation(_tables_to_check, card, source, num, include_layers)
+    _tables_to_check = Blockbuster.add_table_to_value_manipulation(_tables_to_check, card, source, num, include_layers)
 
     -- Override is the personal standard that's on the joker object itself
     local _override = nil
@@ -113,7 +113,7 @@ function Blockbuster.add_table_to_value_manipulation(tables_to_check, card, sour
 end
 
 ---Changes the specific value passed through, if it is compatible
-function Blockbuster.change_values_in_table(card, value_table, reference_table, standard, multiplier_table, overide)
+function Blockbuster.change_values_in_table(card, value_table, reference_table, standard, multiplier_table, override)
     local _standardObj = Blockbuster.ValueManipulation.CompatStandards[standard]
 
     if type(value_table) ~= 'table' then
@@ -140,7 +140,7 @@ function Blockbuster.change_values_in_table(card, value_table, reference_table, 
                 -- Keeps into account any changes that originated from other systems than this one
                 local _current_value = value_table[name]
                 local _no_changes_result = reference_table[name] * card.ability.last_multiplication
-                local _calculate_from = _no_changes_result + (_current_value - _no_changes_result) 
+                local _calculate_from = reference_table[name] + (_current_value - _no_changes_result) 
 
                 value_table[name] = _calculate_from
                 for source, mult in pairs(multiplier_table) do
