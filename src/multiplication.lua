@@ -89,6 +89,7 @@ function Card:bb_set_multiplication_bonus(card, source, num, include_layers)
         local _reference_config = card.ability.base_bonus_table or Blockbuster.construct_perma_bonus_table(card)
         _tables_to_check[#_tables_to_check + 1] = {target = card.ability, base = _reference_config}
     end
+
     -- Logic to handle seals (Unfinished)
     -- if card and card.ability and card.ability.seal ~= nil then
     --     local _reference_config = G.P_CENTERS[card.seal].config
@@ -294,6 +295,9 @@ function Blockbuster.remove_value_multiplication_if_partial_key_match(card, part
     end
 end
 
+---Constructs the table of relevant values for bonus manipulation
+---@param card Card target card
+---@return table
 function Blockbuster.construct_perma_bonus_table(card)
 
     local _perma_table = {
