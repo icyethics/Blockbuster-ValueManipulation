@@ -84,3 +84,19 @@ redirect_objects = {
 Your mod may have jokers that need more specific instructions, or don't actually function easily with the standard you want to use. You can add a variable named 'bb_alternate_standard' to your joker's code, and pass a CompatStandard key. In that case, regardless of source mod, the the alternate standard will be used. 
 
 If you want to use a standard only for one specific joker, creating a CompatStandard object might be overkill. In that case, you can use 'bb_personal_standard', and include a 'variable_conventions' table in your joker's code, which will be used instead of any existing standard.
+
+# Value Manipulation on Non-joker objects
+
+The API will as a default assume you're only targeting a card's center with value manipulation. This means just the joker, enhancement or consumable values, while all other layers will not be manipulated. You can specify the scope by including the include_layers table. The following arguments are accepted as a base:
+
+`` 
+include_layers = {
+    All = true, -- Will target all available layers on the card
+    Base = true, -- Will target only the base of the card, like the perma chips or mult upgrades
+    Bonus = true, -- Will target only the bonus values of a card, like those given by hiker.
+    Center = true, -- (Default) Will target the values on the center of the card.
+    Edition = true, -- Will target the values of the edition
+}
+`` 
+
+By hooking the Blockbuster.add_table_to_value_manipulation function (in multiplication.lua), you can also add additional layers for custom modded layers.

@@ -172,6 +172,19 @@ function Blockbuster.Debug.valManipMult()
     end
 end
 
+function bb_constest(val)
+    Blockbuster.manipulate_value(G.consumeables.cards[1], 'r', val or 2)
+end
+function bb_handtest(val)
+    Blockbuster.manipulate_value(G.hand.cards[1], 'r', val or 2)
+end
+function bb_handtest2(val)
+    for _index, _card in ipairs(G.hand.cards) do
+        Blockbuster.manipulate_value(_card, 'r', val or 2, {Base = true})
+    end
+   
+end
+
 SMODS.Keybind({
     key_pressed = "k",
     held_keys = { "space" },

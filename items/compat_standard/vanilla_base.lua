@@ -51,6 +51,9 @@ Blockbuster.ValueManipulation.CompatStandard{
         j_mr_bones = true,
         j_perkeo = true,
         j_business = true,
+
+        -- ENHANCEMENTS
+        m_wild = true,
     },
     variable_conventions = {
         full_vars = {
@@ -67,5 +70,25 @@ Blockbuster.ValueManipulation.CompatStandard{
         },
         starts_with = {
         }
+    },
+    
+    integer_only_variable_conventions = {
+        full_vars = {
+            "tarots",
+            "planets",
+            "max_highlighted"
+        },
+        ends_on = {
+        },
+        starts_with = {
+        },
+    },
+
+    variable_caps = {
+        retriggers = 25,
+        repetitions = 25,
+        tarots = 25,
+        planets = 25,
+        max_highlighted = 25
     },
 }
