@@ -21,4 +21,23 @@ Blockbuster.ValueManipulation.CompatStandard{
             "rank_"
         }
     },
+    integer_only_variable_conventions = {
+        full_vars = {
+            "cards_created",
+            "max_highlighted",
+            "retriggers",
+            "repetitions"
+        },
+        ends_on = {
+        },
+        starts_with = {
+        },
+    },
+
+    variable_caps = {
+        retriggers = 25,
+        repetitions = 25,
+        cards_created = 25,
+        max_highlighted = 25
+    },
 }

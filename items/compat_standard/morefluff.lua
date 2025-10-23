@@ -31,6 +31,8 @@ Blockbuster.ValueManipulation.CompatStandard{
     },
     integer_only_variable_conventions = {
         full_vars = {
+            "cards_created",
+            "max_highlighted",
         },
         ends_on = {
         },
