@@ -200,11 +200,11 @@ function Card:get_total_multiplier(card)
         return false
     end
 
-    local _total = 0
+    local _total = 1
 
     for _source, _mult in pairs(card.ability.blockbuster_multipliers) do
-        if _mult > 1 then
-            _total = _total + _mult
+        if _mult ~= 1 then
+            _total = _total * _mult
         end
     end
     return _total
