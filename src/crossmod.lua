@@ -2,7 +2,7 @@
 function Blockbuster.cryptid_crossmod()
 if Cryptid and Talisman then
 
-    Cryptid.misprintize_value_blacklist.multipliers = false
+    Cryptid.misprintize_value_blacklist.blockbuster_multipliers = false
 
     local o_crypt_man = Cryptid.manipulate
     function Cryptid.manipulate(card, args)
