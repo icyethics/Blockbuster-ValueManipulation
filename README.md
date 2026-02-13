@@ -7,6 +7,7 @@ Blockbuster Mods:
 - [Blockbuster: Counters ](https://github.com/icyethics/Blockbuster-Counters)
 - [Blockbuster: Spellcasting](https://github.com/icyethics/Blockbuster-Spellcasting)
 - [Blockbuster: Value Manipulation](https://github.com/icyethics/Blockbuster-ValueManipulation)
+- [Blockbuster: Playsets](https://github.com/icyethics/Blockbuster-Playsets)
 - Blockbuster: Confections (Not Yet Released)
 - Blockbuster: Abduction (Not Yet Released)
 
